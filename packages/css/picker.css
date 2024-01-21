@@ -1,0 +1,7 @@
+.okcolor-picker {
+	--inner-spacing: var(--inner-spacing, 1.5rem);
+
+	display: flex;
+	gap: var(--inner-spacing);
+	flex-direction: column;
+}

@@ -1,0 +1,28 @@
+html {
+	height: 100%;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+body {
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	margin: 0;
+	font-size: 100%;
+	font-family: var(--font-base);
+	line-height: 1;
+}
+
+pre,
+code {
+	font-family: var(--font-mono);
+}
+
+img {
+	height: auto;
+	max-width: 100%;
+}

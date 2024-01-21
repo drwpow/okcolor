@@ -1,0 +1,36 @@
+{
+  "name": "@okcolor/picker-react",
+  "version": "0.0.0",
+  "type": "module",
+  "author": {
+    "name": "Drew Powers",
+    "email": "drew@pow.rs"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/drwpow/okcolor",
+    "directory": "packages/picker-react"
+  },
+  "main": "./dist/index.jsx",
+  "exports": {
+    ".": {
+      "import": "./dist/index.jsx",
+      "types": "./dist/index.d.ts"
+    },
+    "./*": "./dist/*"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "peerDependencies": {
+    "react": ">= 17.x"
+  },
+  "dependencies": {
+    "@okcolor/core": "^0.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.48",
+    "react": "^18.2.0"
+  }
+}

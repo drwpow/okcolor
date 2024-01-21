@@ -1,0 +1,59 @@
+:root {
+	// Font
+
+	--font-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+		'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+		'Segoe UI Emoji', 'Noto Color Emoji';
+	--font-mono: 'Commit Mono', ui-monospace, monospace;
+
+	--font-size-700: 2.986rem;
+	--font-size-600: 2.488rem;
+	--font-size-500: 2.074rem;
+	--font-size-400: 1.728rem;
+	--font-size-300: 1.44rem;
+	--font-size-200: 1.2rem;
+	--font-size-100: 1rem;
+	--font-size-75: 0.833rem;
+	--font-size-50: 0.694rem;
+
+	// Color
+
+	--color-blue-800: oklch(1 0.3 240);
+	--color-blue-700: oklch(0.875 0.3 240);
+	--color-blue-600: oklch(0.75 0.3 240);
+	--color-blue-500: oklch(0.625 0.3 240);
+	--color-blue-400: oklch(0.5 0.3 240);
+	--color-blue-300: oklch(0.375 0.3 240);
+	--color-blue-200: oklch(0.25 0.3 240);
+	--color-blue-100: oklch(0.125 0.3 240);
+
+	--color-gray-800: oklch(1 0 0);
+	--color-gray-700: oklch(0.875 0 0);
+	--color-gray-600: oklch(0.75 0 0);
+	--color-gray-500: oklch(0.625 0 0);
+	--color-gray-400: oklch(0.5 0 0);
+	--color-gray-300: oklch(0.375 0 0);
+	--color-gray-200: oklch(0.25 0 0);
+	--color-gray-100: oklch(0.125 0 0);
+
+	--color-green-800: oklch(1 0.3 180);
+	--color-green-700: oklch(0.875 0.3 180);
+	--color-green-600: oklch(0.75 0.3 180);
+	--color-green-500: oklch(0.625 0.3 180);
+	--color-green-400: oklch(0.5 0.3 180);
+	--color-green-300: oklch(0.375 0.3 180);
+	--color-green-200: oklch(0.25 0.3 180);
+	--color-green-100: oklch(0.125 0.3 180);
+
+	--color-red-800: oklch(1 0.3 30);
+	--color-red-700: oklch(0.875 0.3 30);
+	--color-red-600: oklch(0.75 0.3 30);
+	--color-red-500: oklch(0.625 0.3 30);
+	--color-red-400: oklch(0.5 0.3 30);
+	--color-red-300: oklch(0.375 0.3 30);
+	--color-red-200: oklch(0.25 0.3 30);
+	--color-red-100: oklch(0.125 0.3 30);
+
+	// Globals
+	--global-nav-height: 3rem;
+}

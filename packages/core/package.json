@@ -1,0 +1,25 @@
+{
+  "name": "@okcolor/core",
+  "version": "0.0.0",
+  "type": "module",
+  "author": {
+    "name": "Drew Powers",
+    "email": "drew@pow.rs"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/drwpow/okcolor",
+    "directory": "packages/core"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./*": "./*"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
+}

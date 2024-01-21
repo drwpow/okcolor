@@ -1,0 +1,30 @@
+---
+import Header from '../components/header.astro';
+import FreeformContent from '../components/freeform-content.astro';
+import SidebarNav from '../components/sidebar-nav.astro';
+import '../styles/global.scss';
+---
+
+<Header />
+<div class="layout">
+	<SidebarNav />
+	<main class="main">
+		<FreeformContent>
+			<slot />
+		</FreeformContent>
+	</main>
+</div>
+
+<style lang="scss">
+	.layout {
+		display: grid;
+		max-width: 100%;
+		padding-left: 1.5rem;
+		padding-right: 1.5rem;
+
+		@media (width > 900px) {
+			grid-template-columns: 15rem auto;
+			gap: 2.5rem;
+		}
+	}
+</style>

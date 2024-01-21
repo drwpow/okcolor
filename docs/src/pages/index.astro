@@ -1,0 +1,104 @@
+---
+import Header from '../components/header.astro';
+import '../styles/global.scss';
+---
+
+<html>
+	<head>
+		<title>OKColor</title>
+	</head>
+	<body>
+		<Header />
+		<div class="color-wheel">
+			<div class="color-wheel-inner"></div>
+		</div>
+		<main class="main">
+			<h1>OKColor</h1>
+			<p>Color utilities for working with OKLAB, OKLCH, and OKHSL.</p>
+			<a class="bigbutton" href="/getting-started">Get Started</a>
+		</main>
+	</body>
+</html>
+
+<style lang="scss">
+	.main {
+		padding-bottom: 4rem;
+		padding-left: 6rem;
+		padding-right: 6rem;
+		padding-top: 4rem;
+	}
+
+	h1 {
+		letter-spacing: -0.05em;
+		font-size: 4rem;
+		font-weight: 800;
+		margin: 0;
+	}
+
+	p {
+		font-size: var(--font-size-300);
+		letter-spacing: -0.03em;
+		margin-top: 1.5rem;
+		margin-bottom: 2.25rem;
+	}
+
+	.color-wheel {
+		height: 0.375rem;
+		margin-bottom: 1.5rem;
+		margin-left: -1.5rem;
+		position: relative;
+		max-width: calc(100% + 1.5rem);
+		overflow: hidden;
+	}
+
+	.color-wheel-inner {
+		animation: spin 5s linear infinite;
+		background-image: conic-gradient(
+			oklch(0.65 0.3 0),
+			oklch(0.7 0.3 30),
+			oklch(0.75 0.3 60),
+			oklch(0.8 0.3 90),
+			oklch(0.75 0.3 120),
+			oklch(0.7 0.3 150),
+			oklch(0.7 0.3 180),
+			oklch(0.7 0.3 210),
+			oklch(0.7 0.3 240),
+			oklch(0.6 0.3 270),
+			oklch(0.6 0.3 300),
+			oklch(0.6 0.3 330),
+			oklch(0.6 0.3 360)
+		);
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
+		height: 150vw;
+		left: 50%;
+		position: absolute;
+		top: 50%;
+		transform: translate3d(0, -25%, 0);
+		width: 150vw;
+	}
+
+	.bigbutton {
+		align-items: center;
+		background-color: var(--color-gray-100);
+		border-radius: 4rem;
+		color: var(--color-gray-800);
+		display: inline-flex;
+		font-size: var(--font-size-200);
+		font-weight: 600;
+		height: 3.5rem;
+		letter-spacing: -0.03em;
+		padding-left: 2rem;
+		padding-right: 2rem;
+		text-decoration: none;
+	}
+
+	@keyframes spin {
+		0% {
+			transform: translate3d(-50%, -25%, 0) rotate(0deg);
+		}
+		100% {
+			transform: translate3d(-50%, -25%, 0) rotate(360deg);
+		}
+	}
+</style>
