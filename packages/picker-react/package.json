@@ -21,7 +21,8 @@
     "./*": "./dist/*"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "tsc --watch"
   },
   "peerDependencies": {
     "react": ">= 17.x"

@@ -1,7 +1,66 @@
 .okcolor-picker {
-	--inner-spacing: var(--inner-spacing, 1.5rem);
+	--default-inner-spacing: var(--inner-spacing, 1rem);
+	--default-width: var(--width, 300px);
 
 	display: flex;
-	gap: var(--inner-spacing);
 	flex-direction: column;
+	gap: var(--inner-spacing, var(--default-inner-spacing));
+	flex-direction: column;
+	width: var(--width, var(--default-width));
+}
+
+.okcolor-picker-chromasquare {
+	background-color: oklch(0.5 0 0);
+}
+
+.okcolor-picker-huewheel {
+	--huewheel-h: var(--huewheel-height, 1rem);
+
+	background: linear-gradient(
+		90deg,
+		oklch(0.7 0.25347 30),
+		oklch(0.7 0.20053 45),
+		oklch(0.7 0.17729 60),
+		oklch(0.7 0.17025 75),
+		oklch(0.7 0.17636 90),
+		oklch(0.7 0.19074 105),
+		oklch(0.7 0.21344 120),
+		oklch(0.7 0.26081 135),
+		oklch(0.7 0.24069 150),
+		oklch(0.7 0.18627 165),
+		oklch(0.7 0.16249 180),
+		oklch(0.7 0.1534 195),
+		oklch(0.7 0.14545 210),
+		oklch(0.7 0.14816 225),
+		oklch(0.7 0.16424 240),
+		oklch(0.7 0.20549 255),
+		oklch(0.7 0.28118 270),
+		oklch(0.7 0.29359 285),
+		oklch(0.7 0.29426 300),
+		oklch(0.7 0.30519 315),
+		oklch(0.7 0.31766 330),
+		oklch(0.7 0.2832 345),
+		oklch(0.7 0.26229 360),
+		oklch(0.7 0.26229 0),
+		oklch(0.7 0.25388 15)
+	);
+	height: var(--huewheel-h);
+	position: relative;
+}
+
+.okcolor-picker-huewheel-button {
+	--w: var(--huewheel-size, calc(var(--huewheel-h) * 0.75));
+	--h: var(--huewheel-size, calc(var(--huewheel-h) * 0.75));
+
+	background-color: var(--color-gray-800);
+	border: 2px solid var(--color-gray-100);
+	border-radius: 50%;
+	height: var(--w);
+	left: calc(100% * var(--x));
+	padding: 0;
+	position: absolute;
+	top: 50%;
+	transform: translate3d(-50%, -50%, 0);
+	width: var(--w);
+	will-change: left;
 }

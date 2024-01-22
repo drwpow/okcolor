@@ -166,7 +166,6 @@ vec2 find_cusp(float a, float b) {
 	return vec2(L_cusp, C_cusp);
 }
 
-
 // Finds intersection of the line defined by
 // L = L0 * (1 - t) + t * L1;
 // C = t * C1;
@@ -174,20 +173,18 @@ vec2 find_cusp(float a, float b) {
 float find_gamut_intersection(float a, float b, float L1, float C1, float L0) {
 	// Find the cusp of the gamut triangle
 	vec2 cusp = find_cusp(a, b);
-	float cusp_l = cusp.x;
-	float cusp_c = cusp.y;
 
 	// Find the intersection for upper and lower half seprately
-	if (((L1 - L0) * cusp_c - (cusp_l - L0) * C1) <= 0.0) {
+	if (((L1 - L0) * cusp.y - (cusp.x - L0) * C1) <= 0.0) {
 		// Lower half
 
-		return cusp_c * L0 / (C1 * cusp_l + cusp_c * (L0 - L1));
+		return cusp.y * L0 / (C1 * cusp.x + cusp.y * (L0 - L1));
 	}
 
 	// Upper half
 
 	// First intersect with triangle
-	float t = (cusp_c * (L0 - 1.0)) / (C1 * (cusp_l - 1.0) + cusp_c * (L0 - L1));
+	float t = (cusp.y * (L0 - 1.0)) / (C1 * (cusp.x - 1.0) + cusp.y * (L0 - L1));
 
 	// Then one step Halley's method
 	{
@@ -255,30 +252,22 @@ vec3 oklch_to_srgb(vec3 oklch, bool clamp_chroma) {
 	vec3 linear_srgb = oklab_to_linear_srgb(oklab);
 	vec3 srgb = linear_srgb_to_srgb(linear_srgb);
 
-	// for anything sufficiently dark, return 0,0,0 (rather than negative RGB values)
-	if (srgb.x < 0.001 && srgb.y < 0.001 && srgb.z < 0.001) {
-		return vec3(0.0, 0.0, 0.0);
+	// If color is within sRGB range, return
+	if (!clamp_chroma || (srgb.x > 0.0 && srgb.x < 1.0 && srgb.y > 0.0 && srgb.y < 1.0 && srgb.z > 0.0 && srgb.z < 1.0)) {
+		return srgb;
 	}
 
-	// if color is out of sRGB range (0.0, 1.0), use the “Preserve light, clamp Chroma” method
-	// https://bottosson.github.io/posts/gamutclipping/
-	if (clamp_chroma && (srgb.x > 1.001 || srgb.y > 1.001 || srgb.z > 1.001)) {
-		float eps = 0.00001;
-		float c = max(eps, sqrt(pow(oklab.y, 2.0) + pow(oklab.z, 2.0)));
-		float l_gamut = max(min(oklab.x, 1.0), 0.0);
-		float a = oklab.y / c;
-		float b = oklab.z / c;
-		float t = find_gamut_intersection(a, b, oklab.x, c, l_gamut);
+	// Otherwise, clamp using “Preserve lightness, clamp chroma” method (https://bottosson.github.io/posts/gamutclipping)
+	float eps = 0.00001f;
+	float C = max(eps, sqrt(oklab.y * oklab.y + oklab.z * oklab.z));
+	float a_ = oklab.y / C;
+	float b_ = oklab.z / C;
+	float L0 = min(max(oklab.x, 0.0), 1.0);
+	float t = find_gamut_intersection(a_, b_, oklab.x, C, L0);
+	float L_clipped = L0 * (1.0 - t) + t * oklab.x;
+	float C_clipped = t * C;
 
-		vec3 clamped_oklab = vec3(
-			l_gamut * (1.0 - t) + t * oklab.x,
-			a * (t * c),
-			b * (t * c)
-		);
-		return linear_srgb_to_srgb(oklab_to_linear_srgb(clamped_oklab));
-	}
-
-	return srgb;
+	return linear_srgb_to_srgb(oklab_to_linear_srgb(vec3(L_clipped, C_clipped * a_, C_clipped * b_)));
 }
 
 vec3 srgb_to_oklch(vec3 rgb) {

@@ -13,6 +13,7 @@
   },
   "scripts": {
     "build": "pnpm run -r --parallel build",
+    "dev": "pnpm run -r --parallel dev",
     "lint": "oxlint -D all"
   },
   "devDependencies": {

@@ -7,8 +7,8 @@ export default function ReactExample() {
 
 	return (
 		<>
-			<input value={hue} onChange={(evt) => setHue(Number(evt.target.value))} />
-			<ColorPicker colorspace="oklch" hue={hue} />
+			<input value={hue} />
+			<ColorPicker colorspace="oklch" hue={hue} onUpdateHue={setHue} />
 		</>
 	);
 }

@@ -1,7 +1,5 @@
 import React from 'react';
-import ChromaSquare, {
-	type ChromaColorspace,
-} from '@okcolor/core/dist/chroma-square.js';
+import ChromaSquare, { type ChromaColorspace } from '@okcolor/core/dist/chroma-square.js';
 import HueWheel from '@okcolor/core/dist/hue-wheel.js';
 
 export interface OkColorPickerProps {
@@ -17,70 +15,86 @@ export interface OkColorPickerProps {
 	onColorspaceUpdate?: (newColorspace: ChromaColorspace) => void;
 }
 
-function OKColorPicker({ hue, colorspace }: OkColorPickerProps) {
-	const wrapperEl = React.useRef<HTMLDivElement>(null);
-	const [dimensions, setDimensions] = React.useState({
-		width: 400,
-		height: 300,
+function OKColorPicker({ hue, colorspace, onUpdateHue }: OkColorPickerProps) {
+	const [dragData, setDragData] = React.useState<{ startingHue: number; w: number; x: number | undefined }>({
+		startingHue: hue,
+		w: 300,
+		x: undefined,
 	});
-
-	// HueWheel
-	const hueWheelEl = React.useRef<HTMLCanvasElement>(null);
-	const [hueWheel, setHueWheel] = React.useState<HueWheel | undefined>();
-	React.useEffect(() => {
-		if (!hueWheel && hueWheelEl.current) {
-			const c = new HueWheel({
-				colorspace,
-				canvas: hueWheelEl.current,
-				width: dimensions.width,
-				height: dimensions.height,
-			});
-			setHueWheel(c);
-			c.paint();
-		}
-	}, [hueWheel, hueWheelEl.current]);
-	React.useEffect(() => {
-		if (hueWheel) {
-			hueWheel.resize(dimensions);
-			hueWheel.paint();
-		}
-	}, [hueWheel, dimensions]);
 
 	// ChromaSquare
 	const chromaSquareEl = React.useRef<HTMLCanvasElement>(null);
-	const [chromaSquare, setChromaSquare] = React.useState<
-		ChromaSquare | undefined
-	>();
+	const [chromaSquare, setChromaSquare] = React.useState<ChromaSquare | undefined>();
 	React.useEffect(() => {
 		if (!chromaSquare && chromaSquareEl.current) {
+			// initial paint
+			const { width, height } = chromaSquareEl.current.getBoundingClientRect();
 			const c = new ChromaSquare({
 				colorspace,
 				canvas: chromaSquareEl.current,
 				hue,
-				width: dimensions.width,
-				height: dimensions.height,
+				width,
+				height,
 			});
 			setChromaSquare(c);
 			c.paint();
+
+			// on resize, repaint (from styling)
+			const ro = new ResizeObserver((els) => {
+				if (els[0]) {
+					c.resize({
+						width: els[0].contentRect.width,
+						height: els[0].contentRect.height,
+					});
+					c.paint();
+				}
+			});
+			ro.observe(chromaSquareEl.current);
+			return () => ro.disconnect();
 		}
 	}, [chromaSquare, chromaSquareEl.current]);
-	React.useEffect(() => {
-		if (chromaSquare) {
-			chromaSquare.resize(dimensions);
-			chromaSquare.paint();
-		}
-	}, [chromaSquare, dimensions]);
+
+	// React to hue
 	React.useEffect(() => {
 		if (chromaSquare) {
 			chromaSquare.setHue(hue);
 			chromaSquare.paint();
 		}
-	}, [chromaSquare, hue]);
+	}, [hue]);
+
+	// Set global listeners
+	React.useEffect(() => {
+		function handlePointerMove(evt: PointerEvent) {
+			if (dragData.x && onUpdateHue) {
+				const newHue = dragData.startingHue + 360 * ((evt.clientX - dragData.x!) / dragData.w);
+				onUpdateHue?.(Math.max(Math.min(newHue, 390), 30));
+			}
+		}
+		function handlePointerUp() {
+			setDragData((value) => ({ ...value, x: undefined }));
+		}
+		addEventListener('pointerup', handlePointerUp);
+		addEventListener('pointermove', handlePointerMove);
+		return () => {
+			removeEventListener('pointerup', handlePointerUp);
+			removeEventListener('pointermove', handlePointerMove);
+		};
+	}, [dragData, setDragData, onUpdateHue]);
 
 	return (
-		<div ref={wrapperEl} className="okcolor">
-			<canvas className="okcolor-chromasquare" ref={chromaSquareEl} />
-			<canvas className="okcolor-huewheel" ref={hueWheelEl} />
+		<div className="okcolor-picker">
+			<canvas className="okcolor-picker-chromasquare" ref={chromaSquareEl} />
+			<div
+				className="okcolor-picker-huewheel"
+				onPointerDown={(evt) => {
+					const rect = (evt.target as HTMLElement).getBoundingClientRect();
+					const newHue = (360 * (evt.clientX - rect.left)) / rect.width + 30;
+					setDragData({ startingHue: newHue, w: rect.width, x: evt.clientX });
+					onUpdateHue?.(newHue);
+				}}
+			>
+				<button type="button" className="okcolor-picker-huewheel-button" style={{ '--x': hue / 360 - 30 / 360 }} />
+			</div>
 		</div>
 	);
 }
